@@ -51,10 +51,10 @@ server.get("/projects/:id", (req, res)=>
 
 server.get("/resources", (req, res)=>
 {
-    DB.GetResources().then((response)=>
+    DB.GetAllResources().then((response)=>
     {
         res.status(200).json(response);
-    }).catch((error)=>{ res.status(500).send("error"); });
+    }).catch((error)=>{ console.log(error); res.status(500).send("error"); });
 });
 
 server.post("/resources", (req, res)=>
@@ -77,8 +77,11 @@ server.post("/tasks", (req, res)=>
 {
     DB.AddTask(req.body).then((response)=>
     {
-        res.status(200).json(response);
-    }).catch((error)=>{ res.status(500).send("error"); });
+        DB.InsertTaskJoin(response[0], req.body.projectid).then((response)=>
+        {
+            res.status(200).json(response);
+        }).catch(()=>{ res.status(500).send("error"); });
+    }).catch(()=>{ res.status(500).send("error"); });
 });
 
 server.listen(5000);

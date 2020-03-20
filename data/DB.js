@@ -61,7 +61,12 @@ function AddProject(project)
 
 function AddTask(task)
 {
-    return DB("tasks").insert(task);
+    return DB("tasks").insert({description:task.description, notes:task.notes, completed:task.completed});
+}
+
+function InsertTaskJoin(taskid, projectid)
+{
+    return DB("tasks_projects_join").insert({project:projectid, task:taskid});
 }
 
 module.exports =
@@ -75,5 +80,6 @@ module.exports =
         GetAllTasks,
         AddResource,
         AddProject,
-        AddTask
+        AddTask,
+        InsertTaskJoin
     };
